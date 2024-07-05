@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reply">
+	<select id="getReplyList" resultType="com.sqlrecord.dto.Reply">
+		select * from reply order by rno desc
+	</select>	
+	<select id="getReply" parameterType="int" resultType="com.sqlrecord.dto.Reply">
+		select * from reply where rno=#{rno}
+	</select>
+	<select id="replyCount" resultType="int">
+		select count(*) from reply
+	</select>
+	<select id="avgStar" resultType="float">
+		select round(AVG(star), 1) AS avgStar from Reply;
+	</select>
+	<insert id="insReply">
+		insert into reply values (#{id}, default, #{pno}, #{nno}, #{depth}, #{content}, default,
+		 #{star}, #{img1}, #{img2}, #{img3})
+	</insert>
+	<update id="changeReply">
+		update reply set content=#{content}, star=#{star} where rno=#{rno}
+	</update>
+	<delete id="delReply">
+		delete from reply where rno=#{rno}
+	</delete>
+	
+	<!-- 점수대별 갯수랑 페센트 //<![CDATA[...]]> 섹션은 임의의 문자 데이터를 포함할 수 있는 CDATA 섹션 -->
+	<!-- 지금은 pno값 받아와서 출력하는 상태가 아님 -->
+	<select id="getReplyStarAll" resultMap="StarMap">
+    <![CDATA[ 
+        SELECT
+		    '5점 MAX' AS rating_range,
+		    COUNT(*) AS count,
+		    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reply), 1) AS percentage,
+		    1 AS rating_index
+		FROM reply
+		WHERE star = 5.0 
+		UNION
+		SELECT			
+		    '4점 GPA' AS rating_range,
+		    COUNT(*) AS count,
+		    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reply), 1) AS percentage,
+		    2 AS rating_index
+		FROM reply
+		WHERE star >= 4.0 AND star <= 4.9
+		UNION
+		SELECT
+		    '3점 GPA' AS rating_range,
+		    COUNT(*) AS count,
+		    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reply), 1) AS percentage,
+		    3 AS rating_index
+		FROM reply
+		WHERE star >= 3.0 AND star <= 3.9
+		UNION
+		SELECT
+		    '2점 GPA' AS rating_range,
+		    COUNT(*) AS count,
+		    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reply), 1) AS percentage,
+		    4 AS rating_index
+		FROM reply
+		WHERE star >= 2.0 AND star <= 2.9
+		UNION
+		SELECT
+		    '1점 GPA' AS rating_range,
+		    COUNT(*) AS count,
+		    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reply), 1) AS percentage,
+		    5 AS rating_index
+		FROM reply
+		WHERE star >= 1.0 AND star <= 1.9
+		ORDER BY rating_index;
+    ]]>
+</select>
+
+<resultMap id="StarMap" type="java.util.HashMap">
+    <result property="ratingRange" column="rating_range"/>
+    <result property="count" column="count"/>
+    <result property="percentage" column="percentage"/>
+    <result property="ratingIndex" column="rating_index"/>
+</resultMap>
+
+</mapper>

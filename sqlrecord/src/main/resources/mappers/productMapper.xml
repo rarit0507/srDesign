@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+   <!-- 등록된 상품 개수 -->
+    <select id="getProductCount">
+      select count(*) from product 
+    </select>
+	<select id="getProducts" resultType="com.sqlrecord.dto.Product">
+		select * from Product
+	</select>
+	<select id="getProduct" parameterType="int" resultType="com.sqlrecord.dto.Product">
+		select * from Product where pno = #{pno}
+	</select>
+	<delete id="delProduct" parameterType="int">
+		delete from Product where pno=#{pno}
+	</delete> 
+
+</mapper>

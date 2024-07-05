@@ -1,0 +1,50 @@
+@charset "UTF-8";
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/* noto-sans-kr-regular - latin */
+@font-face {
+  font-display: swap; / Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. /
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/noto-sans-kr-v36-latin-regular.woff2') format('woff2'); / Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+body {
+	width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+a { text-decoration: none; outline: none; } 
+a:hover, a:active {text-decoration: none; color:#fff; }
+
+img {
+	width: 100%;
+}
+
+
+ul , li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: black;
+}
+
+#main_content {
+	width: 100%; 
+  	height: auto;
+  	min-height: 100%;
+}
+
+
+#main_footer {
+	width: 100%;
+	height: 300px;
+	background-color: #383637;
+	position: relative;
+}
